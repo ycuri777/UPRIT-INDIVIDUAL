@@ -338,9 +338,6 @@
             </div>
         </form>
 
-        <aside class="nota">
-            Puede adicionar o complementar los campos que considere necesarios.
-        </aside>
     </div>
 
     <div class="botones">
@@ -381,7 +378,7 @@
             return;
         }
         aviso.style.display = "block";
-        aviso.textContent = "Formulario revisado correctamente. Esta página es una demostración: para recibir y guardar los datos realmente se necesita conectar el formulario a un servidor o servicio de formularios.";
+        aviso.textContent = "Formulario realizado correctamente.";
     });
 
     formulario.addEventListener("reset", function () {
@@ -394,8 +391,4 @@
 </script>
 </body>
 </html>
-'''
 
-path = Path("/mnt/data/enviacurriculo.htm")
-path.write_text(html, encoding="utf-8")
-print("Archivo actualizado:", path, "|", path.stat().st_size, "bytes")
