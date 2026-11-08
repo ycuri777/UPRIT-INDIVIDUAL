@@ -1,0 +1,404 @@
+from pathlib import Path
+
+html = r'''<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Currículum Vitae - Yiye Aaron Curi Alcantara</title>
+<style>
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        padding: 28px 14px;
+        background: #eaf6fc;
+        color: #20384a;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    .pagina {
+        width: 100%;
+        max-width: 850px;
+        margin: 0 auto;
+        padding: 16px;
+        background: #fff;
+        border: 2px solid #8dc9e6;
+        box-shadow: 0 8px 24px rgba(22, 73, 104, .12);
+    }
+    .titulo-pagina {
+        margin: 0 auto 14px;
+        max-width: 850px;
+        color: #174f75;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+    .distribucion {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 135px;
+        gap: 14px;
+        align-items: start;
+    }
+    .formulario {
+        border: 1px solid #8cbed5;
+        min-width: 0;
+        background: #fff;
+    }
+    .cabecera {
+        min-height: 112px;
+        display: grid;
+        grid-template-columns: 1fr 88px;
+        border-bottom: 1px solid #8cbed5;
+    }
+    .cabecera h1 {
+        align-self: center;
+        justify-self: center;
+        margin: 0;
+        color: #174f75;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 25px;
+        letter-spacing: .7px;
+        text-align: center;
+    }
+    .foto {
+        border-left: 1px solid #8cbed5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 12px;
+    }
+    .foto label {
+        width: 58px;
+        height: 74px;
+        border: 1px solid #8cbed5;
+        background: #f1f9fd;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: #174f75;
+        font-size: 12px;
+        cursor: pointer;
+        overflow: hidden;
+    }
+    .foto input { display: none; }
+    .foto img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .contenido { padding: 76px 18px 24px; }
+    .seccion { margin-bottom: 27px; }
+    .seccion h2 {
+        margin: 0 0 9px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #7aaec9;
+        color: #174f75;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 20px;
+        font-weight: 600;
+    }
+    .campos {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 20px;
+        row-gap: 7px;
+    }
+    .campo {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+        min-width: 0;
+        min-height: 22px;
+    }
+    .campo label {
+        flex: 0 0 auto;
+        color: #29475b;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 14px;
+    }
+    .campo input, .campo textarea {
+        width: 100%;
+        min-width: 0;
+        padding: 3px 4px;
+        border: 0;
+        border-bottom: 1px solid #b5d3e2;
+        border-radius: 0;
+        outline: none;
+        color: #173d58;
+        background: transparent;
+        font: 14px Arial, sans-serif;
+    }
+    .campo input:focus, .campo textarea:focus {
+        border-bottom: 2px solid #36a6d8;
+        background: #f4fbff;
+    }
+    .ancho { grid-column: 1 / -1; }
+    .experiencia .campos { grid-template-columns: 1fr; }
+    .complementarios textarea {
+        width: 100%;
+        min-height: 90px;
+        padding: 7px;
+        border: 0;
+        border-bottom: 1px solid #b5d3e2;
+        outline: none;
+        resize: vertical;
+        font: 14px Arial, sans-serif;
+    }
+    .declaracion {
+        margin-top: 30px;
+        color: #40596a;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+    .firma {
+        display: flex;
+        gap: 18px;
+        margin-top: 10px;
+    }
+    .firma input {
+        width: 50%;
+        border: 0;
+        border-bottom: 1px solid #b5d3e2;
+        padding: 5px 2px;
+        outline: none;
+    }
+    .nota {
+        margin-top: 565px;
+        padding: 12px 9px;
+        min-height: 205px;
+        border: 1px solid #e3a64a;
+        background: #fff4d9;
+        color: #57452a;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 14px;
+        line-height: 1.8;
+    }
+    .botones {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin: 18px auto 4px;
+    }
+    button {
+        padding: 10px 20px;
+        border: 0;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    .enviar { color: white; background: #176b9b; }
+    .limpiar { color: #174f75; background: #dff2fb; border: 1px solid #a9d4e9; }
+    .aviso {
+        display: none;
+        margin-top: 12px;
+        padding: 10px;
+        color: #174f75;
+        background: #eaf7fd;
+        border: 1px solid #9bcde4;
+        font-size: 13px;
+    }
+    @media (max-width: 650px) {
+        body { padding: 10px 6px; }
+        .pagina { padding: 8px; }
+        .distribucion { grid-template-columns: 1fr; }
+        .nota { margin-top: 0; min-height: 0; }
+        .contenido { padding: 35px 12px 20px; }
+        .campos { grid-template-columns: 1fr; }
+        .ancho { grid-column: auto; }
+        .cabecera h1 { font-size: 19px; }
+        .seccion h2 { font-size: 18px; }
+        .botones { flex-direction: column; }
+    }
+    @media print {
+        body { padding: 0; background: white; }
+        .pagina { max-width: none; border: 0; box-shadow: none; }
+        .botones, .aviso { display: none !important; }
+    }
+</style>
+</head>
+<body>
+
+<p class="titulo-pagina">
+    Elabore un formulario HTML5 para recibir información en una página web
+    “enviacurriculo.htm” y muéstrelo mediante GITHUB.
+</p>
+
+<main class="pagina">
+    <div class="distribucion">
+        <form class="formulario" id="formularioCV">
+            <header class="cabecera">
+                <h1>CURRÍCULUM VITAE</h1>
+                <div class="foto">
+                    <label for="foto" id="vistaFoto">FOTO</label>
+                    <input type="file" id="foto" accept="image/*">
+                </div>
+            </header>
+
+            <div class="contenido">
+                <section class="seccion">
+                    <h2>DATOS PERSONALES</h2>
+                    <div class="campos">
+                        <div class="campo">
+                            <label for="apellidos">Apellidos:</label>
+                            <input id="apellidos" name="apellidos" value="CURI ALCANTARA" required>
+                        </div>
+                        <div class="campo">
+                            <label for="nombres">Nombre:</label>
+                            <input id="nombres" name="nombres" value="YIYE AARON" required>
+                        </div>
+                        <div class="campo ancho">
+                            <label for="dni">DNI:</label>
+                            <input id="dni" name="dni" inputmode="numeric" pattern="[0-9]{8}" maxlength="8">
+                        </div>
+                        <div class="campo">
+                            <label for="fecha">Fecha de nacimiento:</label>
+                            <input id="fecha" name="fecha" type="date">
+                        </div>
+                        <div class="campo">
+                            <label for="lugar">Lugar:</label>
+                            <input id="lugar" name="lugar">
+                        </div>
+                        <div class="campo ancho">
+                            <label for="direccion">Dirección:</label>
+                            <input id="direccion" name="direccion">
+                        </div>
+                        <div class="campo">
+                            <label for="localidad">Localidad:</label>
+                            <input id="localidad" name="localidad">
+                        </div>
+                        <div class="campo">
+                            <label for="provincia">Provincia:</label>
+                            <input id="provincia" name="provincia">
+                        </div>
+                        <div class="campo ancho">
+                            <label for="telefono">Teléfono:</label>
+                            <input id="telefono" name="telefono" type="tel">
+                        </div>
+                        <div class="campo ancho">
+                            <label for="movil">Teléfono móvil:</label>
+                            <input id="movil" name="movil" type="tel">
+                        </div>
+                        <div class="campo ancho">
+                            <label for="email">E-Mail:</label>
+                            <input id="email" name="email" type="email">
+                        </div>
+                    </div>
+                </section>
+
+                <section class="seccion">
+                    <h2>FORMACIÓN Y ESTUDIOS</h2>
+                    <div class="campos">
+                        <div class="campo ancho">
+                            <label for="titulacion">Titulación:</label>
+                            <input id="titulacion" name="titulacion">
+                        </div>
+                        <div class="campo ancho">
+                            <label for="idiomas">Idiomas:</label>
+                            <input id="idiomas" name="idiomas">
+                        </div>
+                        <div class="campo ancho">
+                            <label for="informatica">Conocimientos informáticos:</label>
+                            <input id="informatica" name="informatica">
+                        </div>
+                        <div class="campo ancho">
+                            <label for="cursos">Cursos y seminarios:</label>
+                            <input id="cursos" name="cursos">
+                        </div>
+                    </div>
+                </section>
+
+                <section class="seccion experiencia">
+                    <h2>EXPERIENCIA PROFESIONAL</h2>
+                    <div class="campos">
+                        <div class="campo">
+                            <label for="empresa">Empresa:</label>
+                            <input id="empresa" name="empresa">
+                        </div>
+                        <div class="campo">
+                            <label for="periodo">Fecha:</label>
+                            <input id="periodo" name="periodo" placeholder="Desde - hasta">
+                        </div>
+                        <div class="campo">
+                            <label for="puesto">Puesto/Actividad desarrollada:</label>
+                            <input id="puesto" name="puesto">
+                        </div>
+                    </div>
+                </section>
+
+                <section class="seccion complementarios">
+                    <h2>DATOS COMPLEMENTARIOS</h2>
+                    <textarea id="complementarios" name="complementarios"
+                              aria-label="Datos complementarios"></textarea>
+                </section>
+
+                <div class="declaracion">
+                    Todo lo expuesto anteriormente podrá ser acreditado, en caso de solicitud.
+                    <div class="firma">
+                        <input type="text" name="lugar_fecha" placeholder="Lugar y fecha">
+                        <input type="text" name="firma" placeholder="Firma">
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <aside class="nota">
+            Puede adicionar o complementar los campos que considere necesarios.
+        </aside>
+    </div>
+
+    <div class="botones">
+        <button type="button" class="enviar" id="btnEnviar">Validar formulario</button>
+        <button type="reset" class="limpiar" form="formularioCV">Limpiar formulario</button>
+    </div>
+    <div class="aviso" id="aviso" role="status"></div>
+</main>
+
+<script>
+    const foto = document.getElementById("foto");
+    const vistaFoto = document.getElementById("vistaFoto");
+    const aviso = document.getElementById("aviso");
+    const formulario = document.getElementById("formularioCV");
+
+    foto.addEventListener("change", function () {
+        const archivo = this.files[0];
+        if (!archivo) return;
+        if (!archivo.type.startsWith("image/")) {
+            alert("Selecciona un archivo de imagen.");
+            this.value = "";
+            return;
+        }
+        const lector = new FileReader();
+        lector.onload = function (e) {
+            vistaFoto.innerHTML = "";
+            const imagen = document.createElement("img");
+            imagen.src = e.target.result;
+            imagen.alt = "Fotografía seleccionada";
+            vistaFoto.appendChild(imagen);
+        };
+        lector.readAsDataURL(archivo);
+    });
+
+    document.getElementById("btnEnviar").addEventListener("click", function () {
+        if (!formulario.checkValidity()) {
+            formulario.reportValidity();
+            return;
+        }
+        aviso.style.display = "block";
+        aviso.textContent = "Formulario revisado correctamente. Esta página es una demostración: para recibir y guardar los datos realmente se necesita conectar el formulario a un servidor o servicio de formularios.";
+    });
+
+    formulario.addEventListener("reset", function () {
+        setTimeout(function () {
+            vistaFoto.textContent = "FOTO";
+            aviso.style.display = "none";
+            aviso.textContent = "";
+        }, 0);
+    });
+</script>
+</body>
+</html>
+'''
+
+path = Path("/mnt/data/enviacurriculo.htm")
+path.write_text(html, encoding="utf-8")
+print("Archivo actualizado:", path, "|", path.stat().st_size, "bytes")
